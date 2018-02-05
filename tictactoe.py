@@ -48,6 +48,7 @@ counter = 0
 r = open('database.txt', 'r')
 text = (r.read()).split("\n\n")
 w = open('database.txt', 'w')
+
 while ' ' in ttt.values():
     counter+=1
     if counter % 2 == 0:
