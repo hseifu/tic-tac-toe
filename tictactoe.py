@@ -45,9 +45,10 @@ ttt = {'top-l': ' ', 'top-m': ' ', 'top-r': ' ',
 print(ttt)
 printBoard(ttt)
 counter = 0
+w = open('database.txt', 'w')
 r = open('database.txt', 'r')
 text = (r.read()).split("\n\n")
-w = open('database.txt', 'w')
+
 
 while ' ' in ttt.values():
     counter+=1
