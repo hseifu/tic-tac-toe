@@ -34,10 +34,6 @@ def generate_value(board):
         a = random.randint(0,9)
         if board[board_keys[a]] == " ":
             return ['C',board_keys[a]]
-    
-    
-
- 
 
 ttt = {'top-l': ' ', 'top-m': ' ', 'top-r': ' ',
        'mid-l': ' ', 'mid-m': ' ', 'mid-r': ' ',
