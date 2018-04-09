@@ -10,7 +10,12 @@ class Board:
     def copy_constructor(self, orig):
         self.values = orig.values
         self.turn = orig.turn
-    
+    #Function for checking if we have a space left
+    def isFull(self):
+        if " " in self.values:
+            return False
+        else:
+            return True
     #method to fill the index with the character: turn
     #turn also changed
     def fill(self, index):
@@ -18,6 +23,9 @@ class Board:
         if turn == "X":
             turn = "O"
         else turn = "X"
+    #method for removing an element at index(1 indexed)
+    def remove(self, index):
+        self.values[index - 1] = " "
     #method to fetch the index of a char from the board
     #with index starting at 1
     def index(self,ch):
@@ -29,6 +37,14 @@ class Board:
     #overloading the in operator
     def __contains__(self, val):
         return val in self.values
+        
+#Function for printing values in a board
+def printBoard(board):
+    print(board[1] + '|' + board[2] + '|' + board[3])
+    print('-+-+-')
+    print(board[4] + '|' + board[5] + '|' + board[6])
+    print('-+-+-')
+    print(board[7] + '|' + board[8] + '|' + board[9])
 
     
 
@@ -96,9 +112,9 @@ def maxboard(A):
         if i == " ":
             A_copy.fill(A_copy.index(i))
             val = check_terminate(A_copy,A.turn)
-#now that we have filled it in and the turns have changed
-#we check if we can win. The parameter above is A.turn because
-#we want to know if our initial character wins
+    #now that we have filled it in and the turns have changed
+    #we check if we can win. The parameter above is A.turn because
+    #we want to know if our initial character wins
             if val == 1:
                 return A_copy
             else:
@@ -113,21 +129,70 @@ def minboard(A):
         if i == " ":
             A_copy.fill(A_copy.index(i))
             val = check_terminate(A_copy,A.turn)
-#now that we have filled it in and the turns have changed
-#we check if we can win. The parameter above is A.turn because
-#we want to know if our initial character wins
-            if val == 1:
+    #now that we have filled it in and the turns have changed
+    #we check if we can win. The parameter above is A.turn because
+    #we want to know if our initial character wins
+            if val == -1:
                 return A_copy
             else:
                 boards.append(A_copy)
                 vals.append(val)
-    return boards[vals.index(max(val))]
+    return boards[vals.index(min(val))]
      
 
 
 
 
 
-#Minimax algorithm that takes a board
+#Minimax algorithm that takes a board, how many times it has run,
+#list of places, list of scores and which element to maximize for
+def Minimax(A, i, place, score, max_for, k):
+    term = check_terminate(A, max_for)
+    if term == 1:
+        if i == 1:
+            print("Already won")
+        place.append(k)
+        score.append(term)
+        return
+    if term == -1:
+        if i == 1:
+            print("Already lost")
+        place.append(k)
+        score.append(term)
+        return
+    elif term == 0 and A.isFull:
+        if i == 1:
+            print("Already draw")
+        place.append(k)
+        score.append(term)
+        return
+    else:
+        for j in range(9):
+            if A.values[j] == " ":
+                A.fill(j+1)
+                k = j+1
+                i += 1
+                Minimax(A, i, place, score, max_for, k)
+                A.remove(j+1)
+    
+
+def Play():
+    Game_Board = Board()
+    while not Game_Board.isFull():
+        print("Current board is")
+        printBoard(Game_Board)
+        print("It is now ", Game_Board.turn, "'s turn")
+        print("Where do you wanna put the value")
+        pl = input()
+        Game_Board.fill(pl)
+        printBoard(Game_Board)
+        print("It is now ", Game_Board.turn, "'s turn")
+        places = scores = []
+        Minimax(Game_Board, 1, places, scores, "X", 1)
+        Game_Board.fill(places[scores.index(min(scores))])
+        print("I have now filled in the place of ", places[scores.index(min(scores))])
+        print("The current board is")
+        printBoard(Game_Board)
+
 
 
