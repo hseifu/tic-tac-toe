@@ -1,14 +1,18 @@
 #! /usr/bin/env python3
-import copy
+
+#Tic tac toe with AI
+#Collaborator 1: Henok Hailu
+#Collaborator 2: Leul Shiferaw
 
 #board contains a list of characters representing
 #the different values in the different entries of
 #a board, where " " = empty slot and has the property
 #turn represents which character goes next
 class Board:
-    def __init__(self, values = [" ", " ", " ", " ", " ", " ", " ", " ", " "], turn = "O", orig = None):
+    def __init__(self, turn = "X", values = [" ", " ", " ", " ", " ", " ", " ", " ", " "], orig = None):
         self.values = values
         self.turn = turn
+
     def copy_constructor(self, orig):
         self.values = orig.values
         self.turn = orig.turn
@@ -99,7 +103,7 @@ def check_terminate(A):
     return 0
 
 #minimax
-#Will never get a full board
+#will never get a full board as input
 mv=0
 def Minimax2(A):
     global mv
@@ -153,6 +157,9 @@ def Minimax2(A):
 
 def Play():
     Game_Board = Board()
+    
+    #Choose Player turn
+    pl_tn=input("X or O: ")
 
     #Game Loop
     while True:
@@ -164,39 +171,16 @@ def Play():
         print("Turn: ", Game_Board.turn)
 
         #Player turn
-        pl = int(input(": "))
-        while (pl < 0 or pl > 8) or Game_Board.values[pl]!=" ":
-            print("Try again")
-            pl=int(input(": "))
-        Game_Board.values[pl] = Game_Board.turn
-
-        #Check For Winner
-        temp=check_terminate(Game_Board)
-        if temp == 1:
-            printBoard(Game_Board)
-            print("Game over, winner is X")
-            break 
-        elif temp == -1:
-            printBoard(Game_Board)
-            print("Game over, winner is O")
-            break
-        elif Game_Board.isFull():
-            printBoard(Game_Board)
-            print("Game Over, Draw")
-            break
-
-        #Print Board
-        printBoard(Game_Board)
-        
-        #Switch turn
-        Game_Board.change_turn()
-
-        #Display turn
-        print("Turn: ", Game_Board.turn)
-
-        #Computer turn (X)
-        Minimax2(Game_Board)
-        Game_Board.values[mv] = Game_Board.turn
+        if Game_Board.turn==pl_tn:
+            pl = int(input(": "))
+            while (pl < 0 or pl > 8) or Game_Board.values[pl]!=" ":
+                print("Try again")
+                pl=int(input(": "))
+            Game_Board.values[pl] = Game_Board.turn
+        else:
+            #Computer turn (X)
+            Minimax2(Game_Board)
+            Game_Board.values[mv] = Game_Board.turn
 
         #Check For Winner
         temp=check_terminate(Game_Board)
