@@ -123,7 +123,7 @@ def check_terminate(A):
 #redefined minimax
 def Minimax2(A):
     #base case
-    printBoard(A)
+    #printBoard(A)
     global final_move
     global count
     count += 1
