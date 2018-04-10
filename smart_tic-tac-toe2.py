@@ -123,6 +123,7 @@ def check_terminate(A):
 #redefined minimax
 def Minimax2(A):
     #base case
+    printBoard(A)
     global final_move
     global count
     count += 1
@@ -133,15 +134,16 @@ def Minimax2(A):
     moves = scores = []
     #iterate through entire game 
     for i in range(9):
-        A.values[i] = A.turn
-        A.changeval()
-        try:
-            (scores.append(Minimax2(A)))
-        except RecursionError as re:
-            print("You have reached the maximum level of recursion which is ", count)
-            sys.exit()
+        if A.values[i] == " ":
+            A.values[i] = A.turn
+            A.changeval()
+            try:
+                (scores.append(Minimax2(A)))
+            except RecursionError as re:
+                print("You have reached the maximum level of recursion which is ", count)
+                sys.exit()
 
-        moves.append(i)
+            moves.append(i)
 
     if A.turn == "X":
         max_score_index = scores.index(max(scores))
