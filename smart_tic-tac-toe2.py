@@ -1,5 +1,12 @@
 #! /usr/bin/env python3
 import copy
+import sys
+import threading
+
+threading.stack_size(67108864) 
+sys.setrecursionlimit(1000)
+count = 0
+final_move = 0
 #board contains a list of characters representing
 #the different values in the different entries of
 #a board, where " " = empty slot and has the property
@@ -55,7 +62,6 @@ def printBoard(board):
     print(board[6] + '|' + board[7] + '|' + board[8])
 
     
-
 
 #takes a board and a character and returns 0  
 #if draw or incomplete board, returns 1 if 
@@ -113,34 +119,40 @@ def check_terminate(A):
     else:
         return 0
 
-    
+
 #redefined minimax
 def Minimax2(A):
-    #printBoard(A)
-    moves=[]
+    #base case
+    global final_move
+    global count
+    count += 1
+    term = check_terminate(A)
+    if term != 0 or (term == 0 and A.isFull()):
+        return term
+    #list to hold moves and scores
+    moves = scores = []
+    #iterate through entire game 
     for i in range(9):
-        if A.values[i] == " ":
-            A.values[i] = A.turn
-            A.changeval()
-            temp=check_terminate(A)
-            if temp==-1:
-                return (i,-1)
-            elif temp==1:
-                return (i,1)
-            elif A.isFull():
-                return (i,0)
-            moves.append(Minimax2(A))
-            A.changeval()
-            A.values[i]=" "
+        A.values[i] = A.turn
+        A.changeval()
+        try:
+            (scores.append(Minimax2(A)))
+        except RecursionError as re:
+            print("You have reached the maximum level of recursion which is ", count)
+            sys.exit()
 
-    if A.turn=="O":
-        #Find Max
-        score=[x[1] for x in moves]
-        return moves[score.index(max(score))]
+        moves.append(i)
+
+    if A.turn == "X":
+        max_score_index = scores.index(max(scores))
+
+        final_move = moves[max_score_index]
+        return scores[max_score_index]
     else:
-        #Find Min
-        score=[x[1] for x in moves]
-        return moves[score.index(min(score))]
+        min_score_index = scores.index(min(scores))
+        
+        final_move = moves[min_score_index]
+        return scores[min_score_index]
 
 
 def Play():
@@ -163,11 +175,11 @@ def Play():
         printBoard(Game_Board)
         print("It is now ", Game_Board.turn, "'s turn")
         Board_copy = copy.deepcopy(Game_Board)
-        mv = Minimax2(Board_copy)
+        Minimax2(Board_copy)
 
-        Game_Board.values[mv[0]] = "X"
+        Game_Board.values[final_move] = "X"
         Game_Board.changeval()
-        print("I have now filled in the place of ", mv[0])
+        print("I have now filled in the place of ", final_move)
         print("The current board is")
         printBoard(Game_Board)
     print("Game has ended ")
