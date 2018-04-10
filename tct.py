@@ -54,8 +54,6 @@ def printBoard(board):
     print('-+-+-')
     print(board[6] + '|' + board[7] + '|' + board[8])
 
-    
-
 
 #takes a board and a character and returns 0  
 #if draw or incomplete board, returns 1 if 
@@ -126,15 +124,15 @@ def Minimax2(A):
             if temp==-1:
                 A.changeval()
                 A.values[i]=" "
-                return (i,-1)
+                return [i,-1]
             elif temp==1:
                 A.changeval()
                 A.values[i]=" "
-                return (i,1)
+                return [i,1]
             elif A.isFull():
                 A.changeval()
                 A.values[i]=" "
-                return (i,0)
+                return [i,0]
 
             moves.append(Minimax2(A))
 
@@ -143,12 +141,22 @@ def Minimax2(A):
 
     if A.turn=="X":
         #Find Max
-        score=[x[1] for x in moves]
-        return moves[score.index(max(score))]
+        mx_mv=moves[0][0]
+        mx_sc=moves[0][1]
+        for x in moves:
+            if x[1] > mx_sc:
+                mx_sc=x[1]
+                mx_mv=x[0]
+        return [mx_mv, mx_sc]
     else:
         #Find Min
-        score=[x[1] for x in moves]
-        return moves[score.index(min(score))]
+        mi_mv=moves[0][0]
+        mi_sc=moves[0][1]
+        for x in moves:
+            if x[1] < mi_sc:
+                mi_sc=x[1]
+                mi_mv=x[0]
+        return [mi_mv, mi_sc]
 
 def Play():
     Game_Board = Board()
@@ -166,7 +174,7 @@ def Play():
         pl = int(input(": "))
         while (pl < 0 or pl > 8) or Game_Board.values[pl]!=" ":
             print("Try again")
-            pl=int(input(": ") 
+            pl=int(input(": "))
 
         Game_Board.values[pl] = Game_Board.turn
 

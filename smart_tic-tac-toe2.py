@@ -144,6 +144,8 @@ def Minimax2(A):
                 sys.exit()
 
             moves.append(i)
+            A.changeval()
+            A.values[i] = " "
 
     if A.turn == "X":
         max_score_index = scores.index(max(scores))
