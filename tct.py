@@ -129,13 +129,21 @@ def Minimax2(A):
 
     if A.turn=="X":
         #Find Max
-        mx_mv=max([x[0] for x in moves])
-        mx_sc=max([x[1] for x in moves])
+        mx_mv=moves[0][0]
+        mx_sc=moves[0][1]
+        for x in moves:
+            if x[1] > mx_sc:
+                mx_sc=x[1]
+                mx_mv=x[0]
         return [mx_mv, mx_sc]
     else:
         #Find Min
-        mi_mv=min([x[0] for x in moves])
-        mi_sc=min([x[1] for x in moves])
+        mi_mv=moves[0][0]
+        mi_sc=moves[0][1]
+        for x in moves:
+            if x[1] < mi_sc:
+                mi_sc=x[1]
+                mi_mv=x[0]
         return [mi_mv, mi_sc]
 
 def Play():
