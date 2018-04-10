@@ -112,30 +112,31 @@ def check_terminate(A):
         return 0
 
 #minimax
+#Will never get a full board
 def Minimax2(A):
-    #base case
     moves=[]
     for i in range(9):
         if A.values[i] == " ":
             A.values[i] = A.turn
-            A.changeval()
 
+            #Base case
             temp=check_terminate(A)
             if temp==-1:
-                A.changeval()
                 A.values[i]=" "
                 return [i,-1]
             elif temp==1:
-                A.changeval()
                 A.values[i]=" "
                 return [i,1]
             elif A.isFull():
-                A.changeval()
                 A.values[i]=" "
                 return [i,0]
+            
+            #Change Turn
+            A.changeval()
 
             moves.append(Minimax2(A))
 
+            #Reset
             A.changeval()
             A.values[i]=" "
 
@@ -167,18 +168,20 @@ def Play():
         while (pl < 0 or pl > 8) or Game_Board.values[pl]!=" ":
             print("Try again")
             pl=int(input(": "))
-
         Game_Board.values[pl] = Game_Board.turn
 
         #Check For Winner
         temp=check_terminate(Game_Board)
         if temp == 1:
+            printBoard(Game_Board)
             print("Game over, winner is X")
             break 
         elif temp == -1:
+            printBoard(Game_Board)
             print("Game over, winner is O")
             break
         elif Game_Board.isFull():
+            printBoard(Game_Board)
             print("Game Over, Draw")
             break
 
@@ -195,20 +198,20 @@ def Play():
         #Check For Winner
         temp=check_terminate(Game_Board)
         if temp == 1:
+            printBoard(Game_Board)
             print("Game over, winner is X")
             break 
         elif temp == -1:
+            printBoard(Game_Board)
             print("Game over, winner is O")
             break
         elif Game_Board.isFull():
+            printBoard(Game_Board)
             print("Game Over, Draw")
             break
 
         #Switch turn
         Game_Board.changeval()
-
-    printBoard(Game_Board)
-    print("Game has ended ")
 
 #Start game
 Play()
