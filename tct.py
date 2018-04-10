@@ -53,7 +53,6 @@ def check_terminate(A):
             return 1
         else:
             return -1
-
     #check win across left diagonal
     if A[2] == A[4] == A[6] != " ":
         if A[2] == x:
@@ -96,7 +95,7 @@ def check_terminate(A):
             return 1
         else:
             return -1
-
+    #No wins
     return 0
 
 #minimax
