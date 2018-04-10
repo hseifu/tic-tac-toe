@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 import copy
+
 #board contains a list of characters representing
 #the different values in the different entries of
 #a board, where " " = empty slot and has the property
@@ -11,42 +12,27 @@ class Board:
     def copy_constructor(self, orig):
         self.values = orig.values
         self.turn = orig.turn
-    #Function for checking if we have a space left
+
+    #Is Board Full
     def isFull(self):
-        if " " in self.values:
-            return False
-        else:
-            return True
-    #method to fill the index with the character: turn
-    #turn also changed
-    def fill(self, index):
-        if self.values[index] == " ":
-            self.values[index] = self.turn
-        if self.turn == "X":
-            self.turn = "O"
-        else:
-            self.turn = "X"
-    #method for removing an element at index(1 indexed)
-    def remove(self, index):
-        self.values[index] = " "
-    #method to fetch the index of a char from the board
-    #with index starting at 1
-    def index(self,ch):
-        return self.values.index(ch)+1
-    #overloaded [] operator to fetch values with 
-    #counting index of 1
+        return " " in self.values
+
+    #overloaded [] operator
     def __getitem__(self, index):
         return self.values[index]
+
     #overloading the in operator
     def __contains__(self, val):
         return val in self.values
 
-    def changeval(self):
+    #change turn
+    def change_turn(self):
         if self.turn == "X":
             self.turn = "O"
         else:
             self.turn = "X"
-#Function for printing values in a board
+
+#Print Board
 def printBoard(board):
     print(board[0] + '|' + board[1] + '|' + board[2])
     print('-+-+-')
@@ -55,17 +41,16 @@ def printBoard(board):
     print(board[6] + '|' + board[7] + '|' + board[8])
 
 
-#takes a board and a character and returns 0  
-#if draw or incomplete board, returns 1 if 
-#character x wins and -1 if character x loses
+#Checks for end
 def check_terminate(A):
-    #check win across main diagonal 
     x="X"
+    #check win across main diagonal 
     if A[0] == A[4] == A[8] != " ":
         if A[0] == x:
             return 1
         else:
             return -1
+
     #check win across left diagonal
     if A[2] == A[4] == A[6] != " ":
         if A[2] == x:
@@ -108,8 +93,7 @@ def check_terminate(A):
             return 1
         else:
             return -1
-    else:
-        return 0
+    return 0
 
 #minimax
 #Will never get a full board
@@ -132,12 +116,12 @@ def Minimax2(A):
                 return [i,0]
             
             #Change Turn
-            A.changeval()
+            A.change_turn()
 
             moves.append(Minimax2(A))
 
             #Reset
-            A.changeval()
+            A.change_turn()
             A.values[i]=" "
 
     if A.turn=="X":
@@ -193,11 +177,14 @@ def Play():
             print("Game Over, Draw")
             break
 
-        #Switch turn
-        Game_Board.changeval()
-
         #Print Board
         printBoard(Game_Board)
+        
+        #Switch turn
+        Game_Board.change_turn()
+
+        #Display turn
+        print("Turn: ", Game_Board.turn)
 
         #Computer turn (X)
         mv = Minimax2(Game_Board)
@@ -219,7 +206,7 @@ def Play():
             break
 
         #Switch turn
-        Game_Board.changeval()
+        Game_Board.change_turn()
 
 #Start game
 Play()
