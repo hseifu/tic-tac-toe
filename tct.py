@@ -15,7 +15,7 @@ class Board:
 
     #Is Board Full
     def isFull(self):
-        return " " in self.values
+        return not (" " in self.values)
 
     #overloaded [] operator
     def __getitem__(self, index):
@@ -42,6 +42,9 @@ def printBoard(board):
 
 
 #Checks for end
+#1 for X won
+#-1 for O won
+#0 for not over yet
 def check_terminate(A):
     x="X"
     #check win across main diagonal 
@@ -93,6 +96,7 @@ def check_terminate(A):
             return 1
         else:
             return -1
+
     return 0
 
 #minimax
