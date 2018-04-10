@@ -127,7 +127,7 @@ def Minimax2(A):
             A.change_turn()
             A.values[i]=" "
 
-    if A.turn=="X":
+    if A.turn=="O":
         #Find Max
         mx_mv=moves[0][0]
         mx_sc=moves[0][1]
