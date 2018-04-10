@@ -100,7 +100,9 @@ def check_terminate(A):
 
 #minimax
 #Will never get a full board
+mv=0
 def Minimax2(A):
+    global mv
     moves=[]
     for i in range(9):
         if A.values[i] == " ":
@@ -109,42 +111,45 @@ def Minimax2(A):
             #Base case
             temp=check_terminate(A)
             if temp==-1:
+                mv=i
                 A.values[i]=" "
-                return [i,-1]
+                return -1
             elif temp==1:
+                mv=i
                 A.values[i]=" "
-                return [i,1]
+                return 1
             elif A.isFull():
+                mv=i
                 A.values[i]=" "
-                return [i,0]
+                return 0
             
             #Change Turn
             A.change_turn()
 
-            moves.append(Minimax2(A))
+            moves.append([i,Minimax2(A)])
 
             #Reset
             A.change_turn()
             A.values[i]=" "
 
-    if A.turn=="O":
+    if A.turn=="X":
         #Find Max
-        mx_mv=moves[0][0]
+        mv=moves[0][0]
         mx_sc=moves[0][1]
         for x in moves:
             if x[1] > mx_sc:
+                mv=x[0]
                 mx_sc=x[1]
-                mx_mv=x[0]
-        return [mx_mv, mx_sc]
+        return mx_sc
     else:
         #Find Min
-        mi_mv=moves[0][0]
+        mv=moves[0][0]
         mi_sc=moves[0][1]
         for x in moves:
             if x[1] < mi_sc:
+                mv=x[0]
                 mi_sc=x[1]
-                mi_mv=x[0]
-        return [mi_mv, mi_sc]
+        return mi_sc
 
 def Play():
     Game_Board = Board()
@@ -190,8 +195,8 @@ def Play():
         print("Turn: ", Game_Board.turn)
 
         #Computer turn (X)
-        mv = Minimax2(Game_Board)
-        Game_Board.values[mv[0]] = Game_Board.turn
+        Minimax2(Game_Board)
+        Game_Board.values[mv] = Game_Board.turn
 
         #Check For Winner
         temp=check_terminate(Game_Board)
