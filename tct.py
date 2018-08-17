@@ -172,7 +172,7 @@ def Play():
 
         #Player turn
         if Game_Board.turn==pl_tn:
-            pl = int(input(": "))
+            pl = int(input(": "))-1
             while (pl < 0 or pl > 8) or Game_Board.values[pl]!=" ":
                 print("Try again")
                 pl=int(input(": "))
